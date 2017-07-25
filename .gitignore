@@ -4,6 +4,7 @@
 # Misc
 .cache-main
 .cache-tests
+*~
 
 # Eclipse
 build
