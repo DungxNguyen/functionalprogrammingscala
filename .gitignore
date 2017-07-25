@@ -1,6 +1,10 @@
 *.class
 *.log
 
+# Misc
+.cache-main
+.cache-tests
+
 # Eclipse
 build
 .classpath
