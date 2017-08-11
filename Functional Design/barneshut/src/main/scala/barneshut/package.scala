@@ -196,15 +196,23 @@ package object barneshut {
     val matrix = new Array[ConcBuffer[Body]](sectorPrecision * sectorPrecision)
     for (i <- 0 until matrix.length) matrix(i) = new ConcBuffer
 
+    def inRange(a: Float, b:Float, x: Float) = if (x < a) a else if (x > b) b else x
+    
+    def min(a: Int, b: Int) = if (a > b) b else a
     def +=(b: Body): SectorMatrix = {
-      ???
+      val col: Int = min(sectorPrecision - 1, math.floor((inRange(boundaries.minX, boundaries.maxX, b.x) - boundaries.minX) / (boundaries.width / sectorPrecision)).toInt)
+      val row: Int = min(sectorPrecision - 1, math.floor((inRange(boundaries.minY, boundaries.maxY, b.y) - boundaries.minY) / (boundaries.height / sectorPrecision)).toInt)
+      if (row * sectorPrecision + col >= sectorPrecision * sectorPrecision) println("Debug: ", row, col, sectorPrecision)
+      matrix(row * sectorPrecision + col) += b
       this
     }
 
     def apply(x: Int, y: Int) = matrix(y * sectorPrecision + x)
 
     def combine(that: SectorMatrix): SectorMatrix = {
-      ???
+      val newSectorMatrix = new SectorMatrix(boundaries, sectorPrecision)
+      for (i <- 0 until matrix.length) newSectorMatrix.matrix(i) = matrix(i).combine(that.matrix(i)) 
+      newSectorMatrix 
     }
 
     def toQuad(parallelism: Int): Quad = {
