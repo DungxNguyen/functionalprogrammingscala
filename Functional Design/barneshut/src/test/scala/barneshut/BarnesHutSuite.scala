@@ -74,6 +74,22 @@ import FloatOps._
     }
   }
 
+  test("Leaf.insert(b) should return another Leaf if size < minimumSize") {
+    val quad = Empty(51f, 46.3f, 5f)
+    val b = new Body(3f, 54f, 46f, 0f, 0f)
+    val b2 = new Body(4f, 54f, 47f, 0f, 0f)
+    val leaf = quad.insert(b) 
+    leaf.insert(b2)
+    leaf match {
+      case Leaf(centerX, centerY, size, bodies) =>
+        assert(centerX == 51f, s"$centerX should be 51f")
+        assert(centerY == 46.3f, s"$centerY should be 46.3f")
+        assert(size == 5f, s"$size should be 5f")
+        assert(bodies == Seq(b), s"$bodies should contain only the inserted body")
+      case _ =>
+        fail("Empty.insert() should have returned a Leaf, was $inserted")
+    }
+  }
   // test cases for Body
 
   test("Body.updated should do nothing for Empty quad trees") {
